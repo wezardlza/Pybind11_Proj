@@ -30,7 +30,7 @@ struct Response
 	}
 };
 
-PYBIND11_MODULE(pyexample, m) {
+PYBIND11_MODULE(example_class, m) {
 	py::class_<Response>(m, "Response")
 		.def(py::init<>())
 		.def(py::init<int, std::string>())
