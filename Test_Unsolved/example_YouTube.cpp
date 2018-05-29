@@ -8,14 +8,10 @@ struct Response
 	std::string reason;
 	std::string text;
 	
-	Response(int status,
-		std::string reason,
-		std::string text = ""):
-		status(status), reason(std::move(reason)), text(std::move(text))
-	{}
+	Response(int status, std::string reason, std::string text = "None."):
+		status(status), reason(std::move(reason)), text(std::move(text)) {}
 	
-	Response() : Response(status = 200, reason = "OK") 
-	{}
+	Response() : Response(200, "OK") {}
 
 	bool ok() const {
 		return status >= 200 && status < 400;
@@ -29,7 +25,7 @@ struct Response
 	}
 };
 
-PYBIND11_MODULE(example_class, m) {
+PYBIND11_MODULE(example_YouTube, m) {
 	py::class_<Response>(m, "Response")
 		.def(py::init<>())
 		.def(py::init<int, std::string>())
