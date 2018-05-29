@@ -39,11 +39,11 @@ struct Dog : Pet {
 PYBIND11_MODULE(example_class, m) {
 	
 	// The module explanations
-	m.doc() = 
-		"This module comes from the manual of the pybind11 library. More details can be obtained \
-		from:\n\thttps://media.readthedocs.org/pdf/pybind11/master/pybind11.pdf"
+	m.doc() =
+		"This module comes from the manual of the pybind11 library. More details can be obtained "
+		"from:\n\thttps://media.readthedocs.org/pdf/pybind11/master/pybind11.pdf";
 
-	m.def("pet_store", []() { return std::unique_ptr<Pet>(new Dog);});
+	m.def("pet_store", []() { return std::unique_ptr<Pet>(new Dog("Molly"));});
 
 	/* -----------------------------------------------------------------------------------------------------------------
 	'py::dynamic_attr()' is added as below so that we can add additional dynamic attributes in native Python rather than 
@@ -52,9 +52,9 @@ PYBIND11_MODULE(example_class, m) {
 		the native Python class. If py::dynamic_attr() must be enabled, the user should possibly use Python rather than
 		CPP for the programming work.
 	------------------------------------------------------------------------------------------------------------------*/
-	py::class_<Pet>(m, "Pet", py::dynamic_attr())
+	// py::class_<Pet> pet(m, "Pet", py::dynamic_attr()); pet // currently cannot work!!!
 	// OR --------------------------------------------------------------------------------------------------------------
-	// py::class_<Pet> pet(m, "Pet")							
+	py::class_<Pet> pet(m, "Pet"); pet							
 	/*----------------------------------------------------------------------------------------------------------------*/
 		// Constructor
 		.def(py::init<const std::string &, const std::string &>())
