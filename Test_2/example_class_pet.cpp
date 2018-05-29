@@ -12,6 +12,12 @@ struct Pet {
 PYBIND11_MODULE(example_class_pet, m) {
 	py::class_<Pet>(m, "Pet")
 		.def(py::init<const std::string &>())
+		.def_readwrite("name", &Pet::name)
 		.def("setName", &Pet::setName)
-		.def("getName", &Pet::getName);
+		.def("getName", &Pet::getName)
+		.def("__repr__",
+			[](const Pet &a) {
+				return "<example.Pet named '" + a.name + "'>";
+			}
+		);
 }
