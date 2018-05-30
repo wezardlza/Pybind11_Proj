@@ -1,22 +1,25 @@
-# Instructions on CMaking a Solution to this Tiny Project
-1. The user's directories should prepared as follows:
+### Instructions on CMaking a Solution to this Tiny Project
 
-- GitHub
+1. The user's directories should be prepared as follows (```x``` can be the same directory as ```GitHub```):
 
--- pybind11
+    ```
+    - GitHub
+    
+      -- pybind11
+    
+       --- CMakeLists.txt //provided by the pybind11 library itself
+    
+    - x
+    
+      -- Test_2_Sec_4_2_Sec_4_6
+    
+        --- CMAkeLists.txt // provided by the user
+    
+        --- build
+    ```
 
---- CMakeLists.txt //provided by the pybind11 library itself
+1. Entering the directory ```build``` and type
 
-- x
-
--- Test_2_Sec_5_1_Sec_5_6
-
---- CMAkeLists.txt // provided by the user
-
---- build
-
-1. Entering the directory '''build''' and type
-
-  '''
-  cmake .. -G"Visual Studio 15 Win64"
-  '''
+    ```
+    cmake .. -G"Visual Studio 15 Win64"
+    ```
