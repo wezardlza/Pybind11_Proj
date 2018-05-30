@@ -54,22 +54,27 @@ PYBIND11_MODULE(example_class, m) {
 	------------------------------------------------------------------------------------------------------------------*/
 	// py::class_<Pet> pet(m, "Pet", py::dynamic_attr()); pet // currently cannot work!!!
 	// OR --------------------------------------------------------------------------------------------------------------
-	py::class_<Pet> pet(m, "Pet"); pet							
+	py::class_<Pet> pet(m, "Pet", "Define <class example.Pet>."); pet							
 	/*----------------------------------------------------------------------------------------------------------------*/
 		// Constructor
-		.def(py::init<const std::string &, const std::string &>())
+		.def(py::init<const std::string &, const std::string &>(),
+			"Define a pet instance.")
 		.def(py::init<const std::string &>())
 		.def(py::init<>())
 
 		// Methods related to the name of a pet
 		.def_readwrite("name", &Pet::name)
-		.def("setName", &Pet::setName, "Set the name of the pet.")
-		.def("getName", &Pet::getName)
+		.def("setName", &Pet::setName, 
+			"Set the name of the pet.")
+		.def("getName", &Pet::getName, 
+			"Get the name of the pet.")
 
 		// Methods related to the nick name of a pet
 		.def_property("nick_name", &Pet::getNickName, &Pet::setNickName)
-		.def("setNickName", &Pet::setNickName)
-		.def("getNickName", &Pet::getNickName)
+		.def("setNickName", &Pet::setNickName,
+			"Set the nick name of the pet.")
+		.def("getNickName", &Pet::getNickName,
+			"Get the nick name of the pet.")
 		
 		// The default represnetation format of the example calss called Pet
 		.def("__repr__",
@@ -87,7 +92,8 @@ PYBIND11_MODULE(example_class, m) {
 	// OR --------------------------------------------------------------------------------------------------------------
 	py::class_<Dog>(m, "Dog", pet /* <- specify Python parent type */)	
 		.def(py::init<const std::string &>())							
-		.def("bark", &Dog::bark);										
+		.def("bark", &Dog::bark, 
+			"Return the barking sound of the object (dog) defined by <class 'example_class.Dog'>.");										
 	/*----------------------------------------------------------------------------------------------------------------*/
 
 }
