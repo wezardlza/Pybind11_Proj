@@ -63,7 +63,7 @@ PYBIND11_MODULE(example_class, m) {
 
 		// Methods related to the name of a pet
 		.def_readwrite("name", &Pet::name)
-		.def("setName", &Pet::setName)
+		.def("setName", &Pet::setName, "Set the name of the pet.")
 		.def("getName", &Pet::getName)
 
 		// Methods related to the nick name of a pet
