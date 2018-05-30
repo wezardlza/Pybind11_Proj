@@ -18,7 +18,7 @@
         --- build
     ```
 
-1. Entering the directory ```build``` and type
+1. Enter the directory ```build``` and type
 
     ```
     cmake .. -G"Visual Studio 15 Win64"
