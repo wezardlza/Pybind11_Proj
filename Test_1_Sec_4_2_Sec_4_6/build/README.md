@@ -11,7 +11,7 @@
     
     - x
     
-      -- Test_2_Sec_4_2_Sec_4_6
+      -- Test_1_Sec_4_2_Sec_4_6
     
         --- CMAkeLists.txt // provided by the user
     
