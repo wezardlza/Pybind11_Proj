@@ -38,7 +38,7 @@ public:
 	}
 };
 
-PYBIND11_MODULE(example, m) {
+PYBIND11_MODULE(chapter8, m) {
 	py::class_<Animal, PyAnimal /* <--- trampoline*/>(m, "Animal")
 		.def(py::init<>())
 		.def("go", &Animal::go);
