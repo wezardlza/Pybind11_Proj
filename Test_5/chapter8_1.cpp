@@ -50,11 +50,13 @@ public:
 	}
 	virtual std::string bark() { return "woof!"; }
 };
-/*====================================================================================================================*/
 
-// Dymaic binding: When the function parameter, e.g., 'aminal' below, is a point or reference to a base class, it will
-// trigger a dynamic bindng, under which, the argument can be the base class itself or any class inheriting the base
-// class.
+class Husky : public Dog {};
+
+/*====================================================================================================================*/
+/*Dymaic binding: When the function parameter, e.g., 'aminal' below, is a point or reference to a base class, it will
+trigger a dynamic bindng, under which, the argument can be the base class itself or any class inheriting the base
+class.*/
 std::string call_go(Animal *animal) {
 	return animal->go(3);
 }
@@ -64,37 +66,29 @@ std::string call_go(Animal *animal) {
 Overloaded C++ Classes
 ######################################################################################################################*/
 
-// When combining virtual methods with inheritance, you need to be sure to provide an override for each method
-// for which you want to allow overrides from derived python classes. */
-class PyAnimal : public Animal {
+/*When combining virtual methods with inheritance, you need to be sure to provide an override for each method
+for which you want to allow overrides from derived python classes. */
+
+template <class AnimalBase = Animal> class PyAnimal : public AnimalBase {
 public:
-	/* Inherit the constructors */
-	using Animal::Animal;
-	/* Trampoline (need one for each virtual function) */
+	using AnimalBase::AnimalBase; // Inherit constructors
 	std::string go(int n_times) override {
-		PYBIND11_OVERLOAD_PURE(std::string, Animal, go, n_times)
+		PYBIND11_OVERLOAD_PURE(std::string, AnimalBase, go, n_times);
 	}
-	std::string name() override { PYBIND11_OVERLOAD(std::string, Animal, name, ); }
+	std::string name() override {
+		PYBIND11_OVERLOAD(std::string, AnimalBase, name, );
+	}
 };
 
-class PyDog : public Dog {
+template <class DogBase = Dog> class PyDog : public PyAnimal<DogBase> {
 public:
-	using Dog::Dog; // Inherit constructors
-
-	/*------------------------------------------------------------------------------------------------------------------
-	This overloaded function is set with the method of  PYBIND11_OVERLOAD(). Note that the manual in section 8.2, 
-	pp.58 uses PYBIND11_OVERLOAD_PURE() which forces Dog::go as a pure virtual function when *.go() is called from 
-	<class 'Dachschund'> which is defined as a child of <class 'Dog'>.
-	------------------------------------------------------------------------------------------------------------------*/
-	std::string go(int n_times) override { PYBIND11_OVERLOAD(std::string, Dog, go, n_times); }
-	// -----------------------------------------------------------------------------------------------------------------
-	// std::string go(int n_times) override { PYBIND11_OVERLOAD(std::string, Dog, go, n_times); } // Error!
-	/*----------------------------------------------------------------------------------------------------------------*/
-
-	std::string name() override { PYBIND11_OVERLOAD(std::string, Dog, name, ); }
-	std::string bark() override { PYBIND11_OVERLOAD(std::string, Dog, bark, ); }
+	using PyAnimal<DogBase>::PyAnimal; // Inherit constructors
+									   // Override PyAnimal's pure virtual go() with a non-pure one:
+	std::string go(int n_times) override {
+		PYBIND11_OVERLOAD(std::string, DogBase, go, n_times);
+	}
+	std::string bark() override { PYBIND11_OVERLOAD(std::string, DogBase, bark, ); }
 };
-
 
 /*######################################################################################################################
 Registered Python Classes
@@ -109,10 +103,12 @@ PYBIND11_MODULE(chapter8, m) {
 		.def("check_hp", &Animal::check_hp)
 		.def_readwrite("hp", &Animal::hp);
 
-	py::class_<Dog, Animal, PyDog>(m, "Dog")
+	py::class_<Dog, Animal>(m, "Dog")
 		.def(py::init<double>())
 		.def(py::init<>())
 		.def("bark", &Dog::bark);
+
+	py::class_<>
 
 	m.def("call_go", &call_go);
 }
