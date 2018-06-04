@@ -84,7 +84,7 @@ Overloaded C++ Classes
 
 template <class AnimalBase = Animal> class PyAnimal : public AnimalBase {
 public:
-	using AnimalBase::AnimalBase; // Inherit constructors
+	using AnimalBase::AnimalBase; // inherit constructors
 	std::string go(int n_times) override {
 		PYBIND11_OVERLOAD_PURE(std::string, AnimalBase, go, n_times);
 	}
@@ -95,8 +95,10 @@ public:
 
 template <class DogBase = Dog> class PyDog : public PyAnimal<DogBase> {
 public:
-	using PyAnimal<DogBase>::PyAnimal; // Inherit constructors
-									   // Override PyAnimal's pure virtual go() with a non-pure one:
+	using PyAnimal<DogBase>::PyAnimal; // inherit constructors
+	PyExample(Dog &&base) : Dog(std::move(base)) {}
+
+ // Override PyAnimal's pure virtual go() with a non-pure one:
 	std::string go(int n_times) override {
 		PYBIND11_OVERLOAD(std::string, DogBase, go, n_times);
 	}
