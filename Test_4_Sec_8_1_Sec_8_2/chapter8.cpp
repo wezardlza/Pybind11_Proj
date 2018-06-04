@@ -53,6 +53,8 @@ public:
 	virtual std::string bark() { return "woof!"; }
 };
 
+class Husky : public Dog {};
+
 /*======================================================================================================================
 Module Functions
 ----------------------------------------------------------------------------------------------------------------------*/
@@ -101,6 +103,14 @@ public:
 	std::string bark() override { PYBIND11_OVERLOAD(std::string, Dog, bark, ); }
 };
 
+class PyHusky : public Husky {
+public:
+	using Husky::Husky; // Inherit constructors
+	std::string go(int n_times) override { PYBIND11_OVERLOAD(std::string, Husky, go, n_times); }
+	std::string name() override { PYBIND11_OVERLOAD(std::string, Husky, name, ); }
+	std::string bark() override { PYBIND11_OVERLOAD(std::string, Husky, bark, ); }
+};
+
 
 /*######################################################################################################################
 Registered Python Classes
@@ -119,6 +129,9 @@ PYBIND11_MODULE(chapter8, m) {
 		.def(py::init<double>())
 		.def(py::init<>())
 		.def("bark", &Dog::bark);
+
+	py::class_<Husky, Dog, PyHusky>(m, "Husky")
+		.def(py::init<>());
 
 	m.def("call_go", &call_go);
 }
